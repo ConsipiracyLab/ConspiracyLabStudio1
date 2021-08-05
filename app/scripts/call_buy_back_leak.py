@@ -13,6 +13,7 @@ class CallBuyBackLeak:
             address=self.web3.toChecksumAddress(LEAK_CONTRACT_ADDRESS),
             abi=contract_abi
         )
+        print('init done.')
 
     def run(self):
         wallet_address, wallet_private_key, wallet_mnemonic = self._get_wallet(self.data, 0)
@@ -21,7 +22,9 @@ class CallBuyBackLeak:
         transaction = self.contract.functions.attemptBuyBack().buildTransaction(
             {'chainId': 3, 'gas': 1000000, 'nonce': nounce}
         )
+        print('txn created')
         signed_txn = self.web3.eth.account.signTransaction(transaction, wallet_private_key)
+        print('txn signed')
         txn_hash = self.web3.eth.sendRawTransaction(signed_txn.rawTransaction)
         print(txn_hash)
 
@@ -29,4 +32,6 @@ class CallBuyBackLeak:
         wallet = data['accounts'][index]
         return wallet['address'], wallet['private_key'], wallet['mnemonic']
 
+print('started')
 CallBuyBackLeak().run()
+print('completed')
